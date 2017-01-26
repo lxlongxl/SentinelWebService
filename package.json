@@ -1,0 +1,25 @@
+{
+  "name": "sentinelwebservice",
+  "version": "1.0.0",
+  "description": "Web service for sentinel app",
+  "main": "index.js",
+  "scripts": {
+    "test": "testpls",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lxlongxl/SentinelWebService.git"
+  },
+  "author": "Long Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lxlongxl/SentinelWebService/issues"
+  },
+  "homepage": "https://github.com/lxlongxl/SentinelWebService#readme",
+  "dependencies": {
+    "cassandra-driver": "^3.2.0",
+    "express": "^4.14.0",
+    "request": "^2.79.0"
+  }
+}

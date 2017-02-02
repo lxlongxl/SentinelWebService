@@ -16,6 +16,11 @@ app.get('/updateDatabase', function (req, res) {
   request('https://data.cityoftacoma.org/resource/vzsr-722t.json', function(error, response, data){
     if (!error && response.statusCode == 200) {
       crimeData = data;
+      parsedCrimeData = JSON.parse(crimeData);
+      console.log(parsedCrimeData)
+      parsedCrimeData.foreach(function(data) {
+        console.log(data.crime);
+      })
       var query = 'INSERT INTO crimeData (incident_number, crime, date, intersection, time) Values (?,?,?,?,?)';
       var params = [ '1', 'turtle head', '2017-01-26', 'hello', '12:00'];
 

@@ -35,28 +35,19 @@ app.get('/updateDatabase', function (req, res) {
         }
       }
 
-      console.log("Dropping existing table to import new data")
-      const dropQuery = 'DROP TABLE IF EXISTS TEST.CRIMEDATA ';
-      client.execute(dropQuery, { prepare: true }, function(error) {
-        if (error) {
-          console.log(error);
-        }
-      });
-
-      const createQuery = 'CREATE TABLE IF NOT EXISTS CRIMEDATA (incident_number text PRIMARY KEY, crime text, date date, intersection list<float>, time time);'
-      client.execute(createQuery, function(error) {
+      const truncateQuery = 'TRUNCATE TABLE CRIMEDATA;'
+      client.execute(truncateQuery, function(error) {
         if (error) {
           console.log(error);
         } else {
-          console.log('Table created successfully');
+          console.log('Table truncated successfully');
         }
       });
 
-      //console.log(crimeJson);
       _.each(crimeJson.crimes, function(crime){
         console.log("Attempting insert entry into database");
-        const query = 'INSERT INTO test.crimeData (incident_number, crime, date, intersection, time) Values (?,?,?,?,?);';
-        const params = [crime.incident_number, crime.crime, crime.occurred_on, crime.intersection.coordinates, crime.approximate_time];
+        const query = 'INSERT INTO test.crimeData (incident_number, crime, date, intersection, intersection_address, intersection_city, intersection_state, time) Values (?,?,?,?,?,?,?,?);';
+        const params = [crime.incident_number, crime.crime, crime.occurred_on, crime.intersection.coordinates, crime.intersection_address, crime.intersection_city, crime.intersection_state, crime.approximate_time];
 
         client.execute(query, params, { prepare: true }, function(error) {
           if (error) {
@@ -70,6 +61,7 @@ app.get('/updateDatabase', function (req, res) {
       console.log(error);
     }
   });
+
   res.send('The database has been updated. :)');
 })
 

@@ -17,6 +17,34 @@ app.get('/', function(req, res) {
   res.send('Welcome to our database seeder');
 })
 
+app.get('/getCrimeData', function(req, res) {
+  var finalPayload = {};
+  var crimePayload = [];
+  finalPayload.crimePayload = crimePayload;
+  client.execute('SELECT * FROM test.crimeData', function(error, data) {
+    if (error) {
+      console.log(error);
+    } else {
+      for (var i = 0; i < data.length; i++) {
+        var entry = {};
+        entry.incident_number = data[i].incident_number;
+        entry.crime = data[i].crime;
+        entry.date = data[i].date;
+        entry.intersection = data[i].intersection;
+        entry.intersection_address = data[i].intersection_address;
+        entry.intersection_city = data[i].intersection_city;
+        entry.intersection_state = data[i].intersection_state;
+        entry.approximate_time = data[i].time;
+        console.log(entry);
+        finalPayload.crimePayload.push(entry);
+      }
+      console.log(crimePayload);
+    }
+  });
+  //console.log(finalPayload);
+  res.send("Payload sent");
+});
+
 app.get('/updateDatabase', function (req, res) {
   var crimeData;
   request('https://data.cityoftacoma.org/resource/vzsr-722t.json', function(error, response, data){
@@ -63,8 +91,8 @@ app.get('/updateDatabase', function (req, res) {
   });
 
   res.send('The database has been updated. :)');
-})
+});
 
 app.listen(3000, function (){
   console.log('Example listening on port 3000');
-})
+});

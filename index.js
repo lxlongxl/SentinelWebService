@@ -1,7 +1,8 @@
 var express = require('express');
 var request = require('request');
 var cassandra = require('cassandra-driver');
-var _ = require('underscore')
+var _ = require('underscore');
+var app = express();
 
 var client = new cassandra.Client({ contactPoints: ['127.0.0.1:9042'], keyspace: 'test'});
 client.connect(function (error) {
@@ -10,13 +11,11 @@ client.connect(function (error) {
   }
 });
 
-var app = express()
-
-
 app.get('/', function(req, res) {
   res.send('Welcome to our database seeder');
 })
 
+//API endpoint to receive database data in a JSON response object
 app.get('/getCrimeData', function(req, res) {
   var finalPayload = {};
   var crimePayload = [];
@@ -25,26 +24,27 @@ app.get('/getCrimeData', function(req, res) {
     if (error) {
       console.log(error);
     } else {
-      for (var i = 0; i < data.length; i++) {
+      Array.from(data).forEach(function(row) {
         var entry = {};
-        entry.incident_number = data[i].incident_number;
-        entry.crime = data[i].crime;
-        entry.date = data[i].date;
-        entry.intersection = data[i].intersection;
-        entry.intersection_address = data[i].intersection_address;
-        entry.intersection_city = data[i].intersection_city;
-        entry.intersection_state = data[i].intersection_state;
-        entry.approximate_time = data[i].time;
-        console.log(entry);
+        entry.incident_number = row.incident_number;
+        entry.crime = row.crime;
+        entry.date = row.date;
+        entry.intersection = row.intersection;
+        entry.intersection_address = row.intersection_address;
+        entry.intersection_city = row.intersection_city;
+        entry.intersection_state = row.intersection_state;
+        entry.approximate_time = row.time;
         finalPayload.crimePayload.push(entry);
-      }
-      console.log(crimePayload);
+      })
+      //Uncomment to verify is paylaod was generated
+      //console.log(finalPayload);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(finalPayload, null, 3));
     }
   });
-  //console.log(finalPayload);
-  res.send("Payload sent");
 });
 
+//API endpoint to fetch data from Police API Endpoint and inserts data into local database
 app.get('/updateDatabase', function (req, res) {
   var crimeData;
   request('https://data.cityoftacoma.org/resource/vzsr-722t.json', function(error, response, data){
@@ -89,7 +89,6 @@ app.get('/updateDatabase', function (req, res) {
       console.log(error);
     }
   });
-
   res.send('The database has been updated. :)');
 });
 

@@ -1,0 +1,19 @@
+include mixins
+
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/superhero-theme.css')
+    +nav("SentinelWebService", "dropdown_menu")
+      +nav_item("/", "active") Home
+      +nav_item("/updateDatabase") Update Database
+body
+  #content
+    block content              
+  block footer                      
+  div.navbar-fixed-bottom
+    footer
+      div.row
+        div.col-md-12
+          span &copy SentinelWebService - Long Nguyen 2017

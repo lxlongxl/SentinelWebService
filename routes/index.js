@@ -1,8 +1,8 @@
 var express = require('express');
+var app = express.Router();
 var request = require('request');
 var cassandra = require('cassandra-driver');
 var _ = require('underscore');
-var app = express();
 
 var client = new cassandra.Client({ contactPoints: ['127.0.0.1:9042'], keyspace: 'test'});
 client.connect(function (error) {
@@ -11,12 +11,12 @@ client.connect(function (error) {
   }
 });
 
-app.get('/', function(req, res) {
-  res.send('Welcome to our database seeder');
-})
+/* GET home page. */
+app.get('/', function(req, res, next) {
+  res.render('index', { title: 'SentinelWebService', message: "Welcome to the Project Sentinel Web Service!" });
+});
 
-//API endpoint to receive database data in a JSON response object
-app.get('/getCrimeData', function(req, res) {
+app.get('/getCrimeData.json', function(req, res) {
   var finalPayload = {};
   var crimePayload = [];
   finalPayload.crimePayload = crimePayload;
@@ -38,8 +38,7 @@ app.get('/getCrimeData', function(req, res) {
       })
       //Uncomment to verify is paylaod was generated
       //console.log(finalPayload);
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(finalPayload, null, 3));
+      res.json(JSON.stringify(finalPayload));
     }
   });
 });
@@ -89,9 +88,7 @@ app.get('/updateDatabase', function (req, res) {
       console.log(error);
     }
   });
-  res.send('The database has been updated. :)');
+  res.render('update', { title: 'Database Updated!', message: 'The database has been updated. :)'});
 });
 
-app.listen(3000, function (){
-  console.log('Example listening on port 3000');
-});
+module.exports = app;

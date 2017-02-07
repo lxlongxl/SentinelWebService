@@ -1,0 +1,15 @@
+extends layout
+
+body
+block content
+  div.row
+    div.jumbotron(style='text-align: center') 
+        h1 #{title}
+        h2 #{message}
+    div.row
+      div.col-md-12(style='text-align: center')
+        h4
+          p Here you can update our database with fresh data or fetch our crime data that we retrieved from the Tacoma Police Department.
+        h4 
+          p: To To fetch from our crime database, please query from #[a(href="/getCrimeData.json") here.]
+block footer

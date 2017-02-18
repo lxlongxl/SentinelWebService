@@ -18,25 +18,7 @@ app.get('/', function(req, res, next) {
   res.render('index', { title: 'SentinelWebService', message: "Welcome to the Project Sentinel Web Service!" });
 });
 
-app.get('/getCrimeData.json', function(req, res) {
-  var crimePayload = [];
-  finalPayload.crimePayload = crimePayload;
-  client.execute('SELECT * FROM test.crimeData', function(error, data) {
-    if (error) {
-      console.log(error);
-    } else {
-      Array.from(data).forEach(function(row) {
-        var entry = createJsonEntry(row);
-        finalPayload.crimePayload.push(entry);
-      })
-      //Uncomment to verify is paylaod was generated
-      //console.log(finalPayload);
-      res.json(finalPayload);
-    }
-  });
-});
-
-app.get('/getCrimesPayload.json', function (req, res) {
+app.get('/getCrimeData.json', function (req, res) {
   req.finalPayload = finalPayload;
   var simpleAssaultCrimes = [];
   finalPayload.simpleAssaultCrimes = simpleAssaultCrimes;
@@ -223,7 +205,7 @@ app.get('/getCrimesPayload.json', function (req, res) {
 
   var drugNarcoticViolationCrimes = [];
   finalPayload.drugNarcoticViolationCrimes = drugNarcoticViolationCrimes;
-  client.execute(query, ['Drug/Narcotic Violation '], function(error, data) {
+  client.execute(query, ['Drug/narcotic Violations'], function(error, data) {
     if (error) {
       console.log(error);
     } else {
@@ -234,28 +216,41 @@ app.get('/getCrimesPayload.json', function (req, res) {
     }
   });
 
-  var motorVehicleTheftCrimes = [];
-  finalPayload.motorVehicleTheftCrimes = motorVehicleTheftCrimes;
-  client.execute(query, ['Motor Vehicle Theft'], function(error, data) {
+  var destructionDmgVandOfPropertyCrimes = [];
+  finalPayload.destructionDmgVandOfPropertyCrimes = destructionDmgVandOfPropertyCrimes;
+  client.execute(query, ['Destruction/Damage/Vandalism of Property'], function(error, data) {
     if (error) {
       console.log(error);
     } else {
       Array.from(data).forEach(function(row) {
         var entry = createJsonEntry(row);
-        finalPayload.motorVehicleTheftCrimes.push(entry);
+        finalPayload.destructionDmgVandOfPropertyCrimes.push(entry);
       })
     }
   });
 
-  var motorVehicleTheftCrimes = [];
-  finalPayload.motorVehicleTheftCrimes = motorVehicleTheftCrimes;
-  client.execute(query, ['Motor Vehicle Theft'], function(error, data) {
+  var theftFromBuildingCrimes = [];
+  finalPayload.theftFromBuildingCrimes = theftFromBuildingCrimes;
+  client.execute(query, ['Theft From Building'], function(error, data) {
     if (error) {
       console.log(error);
     } else {
       Array.from(data).forEach(function(row) {
         var entry = createJsonEntry(row);
-        finalPayload.motorVehicleTheftCrimes.push(entry);
+        finalPayload.theftFromBuildingCrimes.push(entry);
+      })
+    }
+  });
+
+  var falsePretensesSwindleConfidenceGameCrimes = [];
+  finalPayload.falsePretensesSwindleConfidenceGameCrimes = falsePretensesSwindleConfidenceGameCrimes;
+  client.execute(query, ['False Pretenses/Swindle/Confidence Game'], function(error, data) {
+    if (error) {
+      console.log(error);
+    } else {
+      Array.from(data).forEach(function(row) {
+        var entry = createJsonEntry(row);
+        finalPayload.falsePretensesSwindleConfidenceGameCrimes.push(entry);
       })
     }
   });
@@ -274,7 +269,6 @@ app.get('/getCrimesPayload.json', function (req, res) {
     res.json(req.finalPayload);
   });
 });
-
 
 
 function createJsonEntry(row) {

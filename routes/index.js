@@ -59,7 +59,7 @@ app.get('/getCrimeData.json', function (req, res) {
       })
     }
   });
-
+//  sdddd
   var burglaryBreakingAndEnteringCrimes = [];
   finalPayload.burglaryBreakingAndEnteringCrimes = burglaryBreakingAndEnteringCrimes;
   client.execute(query, ['Burglary/Breaking & Entering'], function(error, data) {
